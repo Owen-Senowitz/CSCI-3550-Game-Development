@@ -4,8 +4,19 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    void Update ()
+    private Rigidbody2D rigidbody2d;
+
+    private void Awake()
     {
-        transform.Translate(Input.GetAxis("Horizontal")* 15 * Time.deltaTime, 0f, 0f);
+        rigidbody2d = GetComponent<Rigidbody2D>();
+    }
+    private void Update()
+    {
+        transform.Translate(Input.GetAxis("Horizontal") * 15 * Time.deltaTime, 0f, 0f);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            float jumpVelocity = 10f;
+            rigidbody2d.velocity = Vector2.up * jumpVelocity;
+        }
     }
 }
