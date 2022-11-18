@@ -15,6 +15,7 @@ public class MovementController : MonoBehaviour
     Rigidbody2D rb2D;
     Animator animator;
     SpriteRenderer spriteRenderer;
+    
 
     string animationState = "AnimationState";
 
@@ -52,6 +53,7 @@ public class MovementController : MonoBehaviour
             spriteRenderer.flipX = false;
 
         }
+        
         else if (movement.y < 0)
         {
             animator.SetInteger(animationState, (int)CharStates.walk);
@@ -62,6 +64,7 @@ public class MovementController : MonoBehaviour
             animator.SetInteger(animationState, (int)CharStates.walk);
 
         }
+        
         else
         {
             animator.SetInteger(animationState, (int)CharStates.idle);
@@ -84,6 +87,7 @@ public class MovementController : MonoBehaviour
         //         0 = no key pressed
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
+        
 
         // keeps player moving at the same rate of speed, no matter which direction they are moving in
         movement.Normalize();
