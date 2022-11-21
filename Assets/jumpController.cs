@@ -6,6 +6,11 @@ public class jumpController : MonoBehaviour
 {
     private Rigidbody2D player;
     public float jumpForce;
+
+    public Transform groundCheck;
+    public float groundCheckRadius;
+    public LayerMask groundLayer;
+    private bool isTouchingGround;
     
     // Start is called before the first frame update
     void Start()
@@ -16,7 +21,9 @@ public class jumpController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        isTouchingGround = Physics2D.OverlapCircle(groundCheck.position,groundCheckRadius, groundLayer);
+        
+        if (Input.GetKeyDown(KeyCode.Space) && isTouchingGround)
         {
             print("Hitting space bar");
             player.AddForce(Vector2.up * jumpForce);
