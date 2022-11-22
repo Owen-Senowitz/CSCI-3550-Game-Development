@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MovementController : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class MovementController : MonoBehaviour
     Rigidbody2D rb2D;
     Animator animator;
     SpriteRenderer spriteRenderer;
+
+    private Vector3 respawnPoint;
     
 
     string animationState = "AnimationState";
@@ -32,6 +35,7 @@ public class MovementController : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        respawnPoint = transform.position;
     }
 
     // called once per frame
@@ -39,6 +43,7 @@ public class MovementController : MonoBehaviour
     {
         UpdateState();
     }
+
 
     void UpdateState()
     {
@@ -94,5 +99,14 @@ public class MovementController : MonoBehaviour
 
         // set velocity of RigidBody2D and move it
         rb2D.velocity = movement * movementSpeed;
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Wall")
+        {
+            SceneManager.LoadScene("project");
+            //transform.position = respawnPoint;
+
+        }
     }
 }

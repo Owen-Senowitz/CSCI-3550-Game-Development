@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour
 {
     [SerializeField] private float startingHealth;
     public float currentHealth;
+
 
     private void Awake()
     {
@@ -22,6 +24,14 @@ public class Health : MonoBehaviour
     {
         
             currentHealth = Mathf.Clamp(currentHealth + _value, 0, startingHealth);
+    }
+
+    void Update()
+    {
+        if(currentHealth == 0)
+        {
+            SceneManager.LoadScene("project");
+        }
     }
     
 }
