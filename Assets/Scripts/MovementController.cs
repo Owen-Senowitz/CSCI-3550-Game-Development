@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MovementController : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class MovementController : MonoBehaviour
     Rigidbody2D rb2D;
     Animator animator;
     SpriteRenderer spriteRenderer;
+
+    private Vector3 respawnPoint;
+    
 
     string animationState = "AnimationState";
 
@@ -31,6 +35,7 @@ public class MovementController : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        respawnPoint = transform.position;
     }
 
     // called once per frame
@@ -38,6 +43,7 @@ public class MovementController : MonoBehaviour
     {
         UpdateState();
     }
+
 
     void UpdateState()
     {
@@ -52,6 +58,7 @@ public class MovementController : MonoBehaviour
             spriteRenderer.flipX = false;
 
         }
+        /*
         else if (movement.y < 0)
         {
             animator.SetInteger(animationState, (int)CharStates.walk);
@@ -62,6 +69,7 @@ public class MovementController : MonoBehaviour
             animator.SetInteger(animationState, (int)CharStates.walk);
 
         }
+        */
         else
         {
             animator.SetInteger(animationState, (int)CharStates.idle);
@@ -83,12 +91,22 @@ public class MovementController : MonoBehaviour
         //        -1 = left key or "a"  (down key or "s")
         //         0 = no key pressed
         movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
+        //movement.y = Input.GetAxisRaw("Vertical");
+        
 
         // keeps player moving at the same rate of speed, no matter which direction they are moving in
         movement.Normalize();
 
         // set velocity of RigidBody2D and move it
         rb2D.velocity = movement * movementSpeed;
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Wall")
+        {
+            SceneManager.LoadScene("project");
+            //transform.position = respawnPoint;
+
+        }
     }
 }
