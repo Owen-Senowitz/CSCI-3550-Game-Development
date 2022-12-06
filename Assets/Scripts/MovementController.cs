@@ -16,11 +16,20 @@ public class MovementController : MonoBehaviour
     Rigidbody2D rb2D;
     Animator animator;
     SpriteRenderer spriteRenderer;
+    BoxCollider2D boxCollider2D;
 
     private Vector3 respawnPoint;
     
 
     string animationState = "AnimationState";
+
+    private float timeBtwAttack;
+    public float startTimeAttack;
+
+    public Transform attackPos;
+    public LayerMask whatIsEnemies;
+    public float attackRange;
+    public int damage;
 
     enum CharStates
     {
@@ -37,6 +46,8 @@ public class MovementController : MonoBehaviour
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         respawnPoint = transform.position;
+        boxCollider2D = GetComponent<BoxCollider2D>();
+        Debug.Log(boxCollider2D.size);
     }
 
     // called once per frame
@@ -51,6 +62,8 @@ public class MovementController : MonoBehaviour
         // if attacking
         if (Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.Mouse0))
         {
+            Debug.Log("Attack");
+            DealDamage();
             animator.SetInteger(animationState, (int)CharStates.attacking);
         }
         // if not attacking
@@ -105,6 +118,34 @@ public class MovementController : MonoBehaviour
             SceneManager.LoadScene("project");
             //transform.position = respawnPoint;
 
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPos.position, attackRange);
+    }
+
+    private void DealDamage()
+    {
+        if (timeBtwAttack <= 0)
+        {
+            if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
+                Debug.Log(enemiesToDamage.ToString());
+                for (int i = 0; i < enemiesToDamage.Length; i++)
+                {
+                    Debug.Log(enemiesToDamage[i].ToString());
+                    enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(damage);
+                }
+            }
+            timeBtwAttack = startTimeAttack;
+        }
+        else
+        {
+            timeBtwAttack -= Time.deltaTime;
         }
     }
 }
