@@ -24,8 +24,9 @@ public class MovementController : MonoBehaviour
 
     enum CharStates
     {
+        idle = 0,
         walk = 1,
-        idle = 0
+        attacking = 2
     }
 
     // use this for initialization
@@ -47,32 +48,29 @@ public class MovementController : MonoBehaviour
 
     void UpdateState()
     {
-        if (movement.x < 0)
+        // if attacking
+        if (Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.Mouse0))
         {
-            animator.SetInteger(animationState, (int)CharStates.walk);
-            spriteRenderer.flipX = true;
+            animator.SetInteger(animationState, (int)CharStates.attacking);
         }
-        else if (movement.x > 0)
+        // if not attacking
+        else if (!(Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.Mouse0)))
         {
-            animator.SetInteger(animationState, (int)CharStates.walk);
-            spriteRenderer.flipX = false;
+            if (movement.x < 0)
+            {
+                animator.SetInteger(animationState, (int)CharStates.walk);
+                spriteRenderer.flipX = true;
+            }
+            else if (movement.x > 0)
+            {
+                animator.SetInteger(animationState, (int)CharStates.walk);
+                spriteRenderer.flipX = false;
 
-        }
-        /*
-        else if (movement.y < 0)
-        {
-            animator.SetInteger(animationState, (int)CharStates.walk);
-
-        }
-        else if (movement.y > 0)
-        {
-            animator.SetInteger(animationState, (int)CharStates.walk);
-
-        }
-        */
-        else
-        {
-            animator.SetInteger(animationState, (int)CharStates.idle);
+            }
+            else
+            {
+                animator.SetInteger(animationState, (int)CharStates.idle);
+            }
         }
     }
 
