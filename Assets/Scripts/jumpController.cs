@@ -25,7 +25,6 @@ public class jumpController : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.Space) && isTouchingGround)
         {
-            print("Hitting space bar");
             player.AddForce(Vector2.up * jumpForce);
             
         }

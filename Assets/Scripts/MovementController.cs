@@ -47,7 +47,6 @@ public class MovementController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         respawnPoint = transform.position;
         boxCollider2D = GetComponent<BoxCollider2D>();
-        Debug.Log(boxCollider2D.size);
     }
 
     // called once per frame
@@ -62,7 +61,6 @@ public class MovementController : MonoBehaviour
         // if attacking
         if (Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.Mouse0))
         {
-            Debug.Log("Attack");
             DealDamage();
             animator.SetInteger(animationState, (int)CharStates.attacking);
         }
@@ -131,15 +129,10 @@ public class MovementController : MonoBehaviour
     {
         if (timeBtwAttack <= 0)
         {
-            if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Mouse0))
+            Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
+            for (int i = 0; i < enemiesToDamage.Length; i++)
             {
-                Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
-                Debug.Log(enemiesToDamage.ToString());
-                for (int i = 0; i < enemiesToDamage.Length; i++)
-                {
-                    Debug.Log(enemiesToDamage[i].ToString());
-                    enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(damage);
-                }
+                enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(damage);
             }
             timeBtwAttack = startTimeAttack;
         }
